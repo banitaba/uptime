@@ -1,0 +1,43 @@
+name: uptime
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      test_down:
+        description: 'Add a fake down site (uptime-selftest) to test the issue/email path; run again without it to close the issue'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+  actions: write
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Unit tests
+        run: python3 -m unittest -q test_check
+      - name: Check the sites
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TEST_DOWN: ${{ inputs.test_down && '1' || '' }}
+        run: python3 check.py
+      # GitHub disables scheduled workflows in repositories with no activity for 60 days.
+      # Re-enabling through the API keeps this schedule alive without commits.
+      - name: Keep the schedule enabled
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/uptime.yml/enable"

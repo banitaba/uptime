@@ -1,0 +1,11 @@
+[
+  {"name": "archives-app.com", "url": "https://archives-app.com/api/health", "expect": 200},
+  {"name": "standupreports.com", "url": "https://standupreports.com/health/detailed", "expect": 200},
+  {"name": "banisupport.com", "url": "https://banisupport.com/api/health", "expect": 200},
+  {"name": "banilabs.com", "url": "https://banilabs.com/", "expect": 200},
+  {"name": "banilabs-support", "url": "https://banilabs.com/api/support/config", "expect": 200},
+  {"name": "auth.banilabs.com", "url": "https://auth.banilabs.com/", "expect": 302},
+  {"name": "mcp.banilabs.com", "url": "https://mcp.banilabs.com/", "expect": 200},
+  {"name": "ali.banitaba.us", "url": "https://ali.banitaba.us/", "expect": 200},
+  {"name": "homebridge-residency.com", "url": "https://homebridge-residency.com/", "expect": 200}
+]
